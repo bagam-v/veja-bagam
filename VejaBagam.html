@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VEJA BAGAM</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -77,11 +78,11 @@
   }
     :root {
       --primary: #03642c; --secondary: #047562; --accent: #38d397;
-      --card-bg: #fff; --card-radius: 16px; --shadow: 0 6px 24px rgba(0,0,0,.13);
+      --card-bg: #fff; --card-radius: 16px; --shadow: 0 6px 24px rgba(0, 0, 0, 0.377);
       --header-font: 'Montserrat', 'Poppins', sans-serif; --body-font: 'Poppins', sans-serif;
       --border: 1px solid #e6e6e6; --conflict-bg: #ffe3e3; --conflict-txt: #d81c1c;
       --holiday-bg: #ffd6d6; --holiday-border: #d81c1c; --holiday-txt: #b30000;
-      --tooltip-bg: #222; --tooltip-txt: #fff; --tooltip-radius: 8px;
+      --tooltip-bg: #218355; --tooltip-txt: #fff; --tooltip-radius: 8px;
     }
     body {
       font-family: var(--body-font);
@@ -136,11 +137,11 @@
       color:var(--tooltip-txt);
       padding:7px 12px;
       border-radius:var(--tooltip-radius);
-      font-size:.98rem;
+      font-size:.75rem;
       font-family:var(--body-font);
       white-space:nowrap;
       z-index:10;
-      box-shadow:0 2px 8px #2228;
+      box-shadow:0 2px 8px rgba(34, 34, 34, 0.533);
       opacity:0;
       pointer-events:none;
       transition:opacity .14s,top .14s;
@@ -202,9 +203,28 @@
   <div class="container" style="padding-top:80px;">
     <h1 class="text-center">VEJA BAGAM</h1>
     <div class="filters">
-      <label ><i class="fas fa-calendar-alt" style="color: #ffffff;"></i> Mês: <select id="month-select"></select></label>
+      <label><i class="fas fa-calendar-alt" style="color: #ffffff;"></i> Mês: <select id="month-select"></select></label>
       <label><i class="fas fa-calendar" style="color: #ffffff;"></i> Ano: <select id="year-select"></select></label>
     </div>
+    
+    <!-- Legenda do calendário -->
+<div class="calendar-legend" style="margin-bottom:14px; display:flex; gap:20px; flex-wrap:wrap; align-items:center; justify-content: center" >
+  <span style="display:flex;align-items:center;gap:7px;">
+    <span style="display:inline-block; width:22px; height:22px; border-radius:7px; background:#ffd6d6; border:2px solid #d81c1c; margin-right:4px;"></span>
+    <span > <h5 style="margin-top: 20px; margin-bottom: 20px; color: white;">Feriado Nacional</h5></span>
+  </span>
+  <span style="display:flex;align-items:center;gap:7px;">
+    <span style="display:inline-block; width:22px; height:22px; border-radius:7px; background:#1976d2; border:2px solid #89b3dd; margin-right:4px;"></span>
+    <span> <h5 style="margin-top: 20px; margin-bottom: 20px; color: white;">Feriado Municipal e Estadual </h5></span>
+  </span>
+  <span style="display:flex;align-items:center;gap:7px;">
+    <span style="display:inline-block; width:22px; height:22px; border-radius:7px; background:#fff7c1; border:2px solid #ef6c00; margin-right:4px;"></span>
+    <span><h5 style="margin-top: 20px; margin-bottom: 20px; color: white;">Aniversário</h5></span>
+  </span>
+  
+  </span>
+</div>
+    
     <div class="calendar-container">
       <div class="calendar-header">
         <button class="btn btn-custom me-2" id="prev-month"><i class="fas fa-chevron-left"></i> Anterior</button>
@@ -444,17 +464,18 @@
   let holidayIcon = "";
   if (localHoliday) {
     d.classList.add("local-holiday");
-    tooltipText = `Aniversário: ${birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ")}\nFeriado municipal: ${localHoliday.name}`;
+    tooltipText = `Aniversário: ${birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ")}\n | Feriado municipal: ${localHoliday.name}`;
     holidayIcon = `<i class="fa-solid fa-city"></i>`; // Ícone para municipal
   } else {
-    tooltipText = `Aniversário: ${birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ")}\nFeriado nacional: ${holiday.name}`;
+    tooltipText = `Aniversário: ${birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ")}\n | Feriado nacional: ${ holiday.name }`;
     holidayIcon = `<i class="fa-solid fa-calendar-day"></i>`; // Ícone para nacional
   }
+  //no tooltiptext altera a formatação do texto da caixa verdinha
   d.innerHTML = `
     <span style="position: relative;">${day}</span>
     <i class="fa-solid fa-birthday-cake"></i>
     ${holidayIcon}
-    <div class="calendar-tooltip" style="white-space:pre-line;">${tooltipText}</div>
+    <div class="calendar-tooltip";">${tooltipText}</div> 
   `;
 }
     else if (localHoliday) {
