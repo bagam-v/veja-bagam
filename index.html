@@ -303,7 +303,7 @@
   }
 
   // Complementa o renderCalendar sem alterar nada do original!
-  const originalRenderCalendar = renderCalendar;
+/*  const originalRenderCalendar = renderCalendar;
   renderCalendar = function() {
     originalRenderCalendar();
     const calendarGrid = document.getElementById("calendar-grid");
@@ -324,7 +324,7 @@
         tooltip.textContent = found.name;
       }
     });
-  };
+  };*/
     // FERIADOS: mês vai de 0(Janeiro) a 11(Dezembro). Exemplo: 1/1, 7/9, 25/12
     const holidays = [
       { day: 1, month: 0, name: "Confraternização Universal" },    // 01/01
@@ -540,6 +540,7 @@
   </script>
 </body>
 </html>
+
 
 
 
