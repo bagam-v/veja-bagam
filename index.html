@@ -11,6 +11,14 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
 
+.calendar-day.today {
+  border: 3px solid #dd4a06 !important;
+  box-shadow: 0 0 16px 2px #dd4a06, 0 0 0 px #dd4a06 inset;
+  animation: pulse-today 1.2s infinite alternate;
+  position: relative;
+}
+
+
 .calendar-day.conflict-event {
       /* Metade feriado, metade aniversário */
       background: linear-gradient(
@@ -256,94 +264,109 @@
   <script>
     // Todos os colaboradores mantidos e exemplo de conflito
     const collaborators = [
- {name:"AGEILSON",setor:"Operação",photo:"Fotos Colaboradores/ageilson.png",vacation:{start:"15/09/2025",end:"30/09/2025"},birthday:"11/09"},
-  {name:"ALLAN",setor:"Operação",photo:"Fotos Colaboradores/allan.png",vacation:{start:"15/09/2025",end:"30/09/2025"},birthday:"12/06"},
-  {name:"ALDERIR",setor:"Pintura",photo:"Fotos Colaboradores/alderir.jpeg",vacation:{start:"15/09/2025",end:"30/09/2025"},birthday:"04/02"},
-  {name:"ANA CLÉZIA",setor:"CCO",photo:"Fotos Colaboradores/ana.jpeg",vacation:{start:"03/08/2025",end:"03/09/2025"},birthday:"20/11/"},
-  {name:"AUGUSTO",setor:"Manutenção",photo:"Fotos Colaboradores/augusto.png",vacation:{start:"04-01-10",end:"26-01-20"},birthday:"25/05"},
-  {name:"CLEIRTON",setor:"Gerência",photo:"Fotos Colaboradores/cleirton.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"12/05"},
-  {name:"CRISTIANO",setor:"Operação",photo:"Fotos Colaboradores/cristiano.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"15/04"},
-  {name:"DANIEL",setor:"Conservação",photo:"Fotos Colaboradores/daniel.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"04/09"},
-  {name:"DANILO",setor:"Laboratório",photo:"Fotos Colaboradores/danilo.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"12/10"},
-  {name:"DOUGLAS",setor:"Operação",photo:"Fotos Colaboradores/douglas.jpeg",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"23/12"},
-  {name:"EDNILMA",setor:"Conservação",photo:"Fotos Colaboradores/nenem.jpg",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"26/08"},
-  {name:"EDUARDO",setor:"Liderança",photo:"Fotos Colaboradores/eduardo.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"16/03"},
-  {name:"ELTOM",setor:"Operação",photo:"Fotos Colaboradores/eltom.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"11/08"},
-  {name:"NALDO",setor:"Operação",photo:"Fotos Colaboradores/naldo.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"28/10"},
-  {name:"GABRIEL",setor:"Vigilância",photo:"Fotos Colaboradores/gabriel.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"25/03"},
-  {name:"GEDSON",setor:"Operação",photo:"Fotos Colaboradores/gedson.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"03/06"},
-  {name:"GLEISON",setor:"Operação",photo:"Fotos Colaboradores/gleison.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"06/07"},
-  {name:"HELINE",setor:"Administrativo",photo:"Fotos Colaboradores/heline.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"06/11"},
-  {name:"HILANA",setor:"CCO",photo:"Fotos Colaboradores/hilana.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"24/06"},
-  {name:"ISAIAS",setor:"Operação",photo:"Fotos Colaboradores/isaias.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"29/03"},
-  {name:"JOÃO VITOR",setor:"CCO",photo:"Fotos Colaboradores/joao.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"12/05"},
-  {name:"JUNIOR",setor:"Manutenção",photo:"Fotos Colaboradores/junior.jpeg",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"16/11"},
-  {name:"JULLY",setor:"Operação",photo:"Fotos Colaboradores/jully.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"23/09"},
-  {name:"LEANDRO",setor:"Vigilância",photo:"Fotos Colaboradores/leandro.jpeg",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"25/02"},
-  {name:"MARIA CLAUDIA",setor:"Administrativo",photo:"Fotos Colaboradores/claudia.jpg",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"27/10"},
-  {name:"NAILSON",setor:"Vigilância",photo:"Fotos Colaboradores/nailson.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"03/11"},
-  {name:"PETERSON",setor:"Laboratório",photo:"Fotos Colaboradores/peterson.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"10/08"},
-  {name:"RONILSON",setor:"Operação",photo:"Fotos Colaboradores/ronilson.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"08/12"},
-  {name:"SAMUEL",setor:"Conservação",photo:"Fotos Colaboradores/samuel.jpg",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"28/08"},
-  {name:"VALMIR",setor:"Vigilância",photo:"Fotos Colaboradores/valmir.jpg",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"02/01"},
-  {name:"VLADIMIR",setor:"Pintura",photo:"Fotos Colaboradores/vlad.jpg",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"17/02"},
-  {name:"WAGNER",setor:"CCO",photo:"Fotos Colaboradores/wagner.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"10/05"},
-  {name:"WENDERSON",setor:"TI",photo:"Fotos Colaboradores/wenderson.png",vacation:{start:"2026-06-03",end:"2026-07-03"},birthday:"08/08"},
-  {name:"WILLIAM",setor:"SMS",photo:"Fotos Colaboradores/william.png",vacation:{start:"2026-01-10",end:"2026-01-20"},birthday:"01/04"},
+  {name:"AGEILSON",setor:"Operação",photo:"Fotos Colaboradores/ageilson.png",vacations:[
+    {start:"13/01/2025",end:"01/02/2025"},
+    {start:"12/01/2026",end:"31/01/2026"}
+  ],birthday:"11/09"},
+  {name:"ALLAN",setor:"Operação",photo:"Fotos Colaboradores/allan.png",vacations:[
+    {start:"29/05/2025",end:"12/06/2025"},
+    {start:"20/10/2025",end:"08/11/2025"}
+  ],birthday:"12/06"},
+  {name:"ALDERIR",setor:"Pintura",photo:"Fotos Colaboradores/alderir.jpeg",vacations:[],birthday:"04/02"},
+  {name:"ANA CLÉZIA",setor:"CCO",photo:"Fotos Colaboradores/ana.jpeg",vacations:[],birthday:"20/11"},
+  {name:"AUGUSTO",setor:"Manutenção",photo:"Fotos Colaboradores/augusto.png",vacations:[],birthday:"25/05"},
+  {name:"CLEIRTON",setor:"Gerência",photo:"Fotos Colaboradores/cleirton.png",vacations:[
+    {start:"03/11/2025",end:"17/11/2025"},
+    {start:"23/02/2025",end:"27/02/2025"}
+  ],birthday:"12/05"},
+  {name:"CRISTIANO",setor:"Operação",photo:"Fotos Colaboradores/cristiano.png",vacations:[
+    {start:"14/04/2025",end:"03/05/2025"}
+  ],birthday:"15/04"},
+  {name:"DANIEL",setor:"Conservação",photo:"Fotos Colaboradores/daniel.png",vacations:[],birthday:"04/09"},
+  {name:"DANILO",setor:"Laboratório",photo:"Fotos Colaboradores/danilo.png",vacations:[],birthday:"12/10"},
+  {name:"DOUGLAS",setor:"Operação",photo:"Fotos Colaboradores/douglas.jpeg",vacations:[],birthday:"23/12"},
+  {name:"EDNILMA",setor:"Conservação",photo:"Fotos Colaboradores/nenem.jpg",vacations:[],birthday:"26/08"},
+  {name:"EDUARDO",setor:"Liderança",photo:"Fotos Colaboradores/eduardo.png",vacations:[
+    {start:"05/03/2025",end:"09/03/2025"}
+  ],birthday:"16/03"},
+  {name:"ELTOM",setor:"Operação",photo:"Fotos Colaboradores/eltom.png",vacations:[
+    {start:"16/06/2025",end:"06/07/2025"}
+  ],birthday:"11/08"},
+  {name:"NALDO",setor:"Operação",photo:"Fotos Colaboradores/naldo.png",vacations:[
+   {start:"19/02/2025",end:"05/03/2025"}
+  ],birthday:"28/10"},
+  {name:"GABRIEL",setor:"Vigilância",photo:"Fotos Colaboradores/gabriel.png",vacations:[],birthday:"25/03"},
+  {name:"GEDSON",setor:"Operação",photo:"Fotos Colaboradores/gedson.png",vacations:[
+    {start:"04/08/2025",end:"02/09/2025"}
+  ],birthday:"03/06"},
+  {name:"GLEISON",setor:"Operação",photo:"Fotos Colaboradores/gleison.png",vacations:[
+    {start:"15/09/2025",end:"29/09/2025"},
+    {start:"17/11/2025",end:"01/12/2025"}
+  ],birthday:"06/07"},
+  {name:"HELINE",setor:"Administrativo",photo:"Fotos Colaboradores/heline.png",vacations:[
+    {start:"24/02/2025",end:"28/02/2025"}
+  ],birthday:"06/11"},
+  {name:"HILANA",setor:"CCO",photo:"Fotos Colaboradores/hilana.png",vacations:[
+    {start:"24/02/2025",end:"28/02/2025"}
+  ],birthday:"24/06"},
+  {name:"ISAIAS",setor:"Operação",photo:"Fotos Colaboradores/isaias.png",vacations:[],birthday:"29/03"},
+  {name:"JOÃO VITOR",setor:"CCO",photo:"Fotos Colaboradores/joao.png",vacations:[
+    {start:"23/01/2025",end:"06/02/2025"}
+  ],birthday:"12/05"},
+  {name:"JUNIOR",setor:"Manutenção",photo:"Fotos Colaboradores/junior.jpeg",vacations:[],birthday:"16/11"},
+  {name:"JULLY",setor:"Operação",photo:"Fotos Colaboradores/jully.png",vacations:[
+    {start:"02/12/2025",end:"31/12/2025"}
+  ],birthday:"23/09"},
+  {name:"LEANDRO",setor:"Vigilância",photo:"Fotos Colaboradores/leandro.jpeg",vacations:[],birthday:"25/02"},
+  {name:"MARIA CLAUDIA",setor:"Administrativo",photo:"Fotos Colaboradores/claudia.jpg",vacations:[],birthday:"27/10"},
+  {name:"NAILSON",setor:"Vigilância",photo:"Fotos Colaboradores/nailson.png",vacations:[],birthday:"03/11"},
+  {name:"PETERSON",setor:"Laboratório",photo:"Fotos Colaboradores/peterson.png",vacations:[
+    {start:"24/02/2025",end:"28/02/2025"}
+  ],birthday:"10/08"},
+  {name:"RONILSON",setor:"Operação",photo:"Fotos Colaboradores/ronilson.png",vacations:[
+    {start:"10/03/2025",end:"08/04/2025"}
+  ],birthday:"08/12"},
+  {name:"SAMUEL",setor:"Conservação",photo:"Fotos Colaboradores/samuel.jpg",vacations:[],birthday:"28/08"},
+  {name:"VALMIR",setor:"Vigilância",photo:"Fotos Colaboradores/valmir.jpg",vacations:[],birthday:"02/01"},
+  {name:"VLADIMIR",setor:"Pintura",photo:"Fotos Colaboradores/vlad.jpg",vacations:[],birthday:"17/02"},
+  {name:"WAGNER",setor:"CCO",photo:"Fotos Colaboradores/wagner.png",vacations:[
+    {start:"02/01/2025",end:"20/01/2025"},
+    {start:"20/05/2025",end:"24/05/2025"},
+    {start:"02/01/2026",end:"20/01/2026"}
+  ],birthday:"10/05"},
+  {name:"WENDERSON",setor:"TI",photo:"Fotos Colaboradores/wenderson.png",vacations:[],birthday:"08/08"},
+  {name:"WILLIAM",setor:"SMS",photo:"Fotos Colaboradores/william.png",vacations:[
+    // 1º período não informado (xxxxx)
+    {start:"24/06/2025",end:"28/06/2025"},
+    {start:"19/08/2025",end:"01/09/2025"}
+  ],birthday:"01/04"}
 ];
- const localHolidays = [
-    { day: 20, month: 0, year: 2025, name: "São Sebastião – Municipal" },
-    { day: 7, month: 4, year: 2025, name: "Emancipação Política de Guamaré – Municipal" },
-    { day: 15, month: 7, year: 2025, name: "Nossa Senhora dos Navegantes – Municipal" },
-    { day: 3, month: 9, year: 2025, name: "Memória Dos Protomártires de Uruaçu e Cunhaú – Estadual (RN)" },
-    { day: 8, month: 11, year: 2025, name: "Nossa Senhora da Conceição – Municipal" }
-  ];
-  function getLocalHoliday(day, month, year) {
-    return localHolidays.find(h => h.day === day && h.month === month && h.year === year);
-  }
-
-  // Complementa o renderCalendar sem alterar nada do original!
-/*  const originalRenderCalendar = renderCalendar;
-  renderCalendar = function() {
-    originalRenderCalendar();
-    const calendarGrid = document.getElementById("calendar-grid");
-    const dayCells = calendarGrid.querySelectorAll(".calendar-day:not(.header):not(.empty)");
-    dayCells.forEach(cell => {
-      const day = parseInt(cell.textContent, 10);
-      const found = getLocalHoliday(day, selectedMonth, selectedYear);
-      if (found) {
-        cell.classList.add("local-holiday");
-        cell.classList.remove("holiday"); // Remove feriado nacional se houver sobreposição
-        // Adiciona ou sobrescreve o tooltip
-        let tooltip = cell.querySelector(".calendar-tooltip");
-        if (!tooltip) {
-          tooltip = document.createElement("div");
-          tooltip.className = "calendar-tooltip";
-          cell.appendChild(tooltip);
-        }
-        tooltip.textContent = found.name;
-      }
-    });
-  };*/
-    // FERIADOS: mês vai de 0(Janeiro) a 11(Dezembro). Exemplo: 1/1, 7/9, 25/12
-    const holidays = [
-      { day: 1, month: 0, name: "Confraternização Universal" },    // 01/01
-      { day: 25, month: 1, name: "Carnaval" },                    // 25/02
-      { day: 29, month: 2, name: "Paixão de Cristo" },            // 29/03
-      { day: 21, month: 3, name: "Tiradentes" },                  // 21/04
-      { day: 1, month: 4, name: "Dia do Trabalho" },              // 01/05
-      { day: 7, month: 8, name: "Independência do Brasil" },      // 07/09
-      { day: 12, month: 9, name: "Nossa Senhora Aparecida" },     // 12/10
-      { day: 2, month: 10, name: "Finados" },                     // 02/11
-      { day: 15, month: 10, name: "Proclamação da República" },   // 15/11
-      { day: 20, month: 10, name: "Consciência Negra" },           // 20/1
-      { day: 25, month: 11, name: "Natal" },                       // 25/12
+const localHolidays = [
+      { day: 20, month: 0, year: 2025, name: "São Sebastião – Municipal" },
+      { day: 7, month: 4, year: 2025, name: "Emancipação Política de Guamaré – Municipal" },
+      { day: 15, month: 7, year: 2025, name: "Nossa Senhora dos Navegantes – Municipal" },
+      { day: 3, month: 9, year: 2025, name: "Memória Dos Protomártires de Uruaçu e Cunhaú – Estadual (RN)" },
+      { day: 8, month: 11, year: 2025, name: "Nossa Senhora da Conceição – Municipal" }
     ];
-
+    function getLocalHoliday(day, month, year) {
+      return localHolidays.find(h => h.day === day && h.month === month && h.year === year);
+    }
+    const holidays = [
+      { day: 1, month: 0, name: "Confraternização Universal" },
+      { day: 25, month: 1, name: "Carnaval" },
+      { day: 29, month: 2, name: "Paixão de Cristo" },
+      { day: 21, month: 3, name: "Tiradentes" },
+      { day: 1, month: 4, name: "Dia do Trabalho" },
+      { day: 7, month: 8, name: "Independência do Brasil" },
+      { day: 12, month: 9, name: "Nossa Senhora Aparecida" },
+      { day: 2, month: 10, name: "Finados" },
+      { day: 15, month: 10, name: "Proclamação da República" },
+      { day: 20, month: 10, name: "Consciência Negra" },
+      { day: 25, month: 11, name: "Natal" }
+    ];
     const monthNames = [
       "Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
     ];
-
     function parseDateBR(str) {
       if (!str) return null;
       str = str.replace(/-/g, '/');
@@ -379,49 +402,56 @@
       const p = str.split('/');
       return p[0]?parseInt(p[0],10):null;
     }
-    function isOnVacationInMonth(v,month,year) {
-      if (!v?.start||!v?.end) return false;
-      const s = parseDateBR(v.start), e = parseDateBR(v.end);
-      if (!s||!e) return false;
-      return (s.getFullYear()<year||(s.getFullYear()==year&&s.getMonth()<=month))&&(e.getFullYear()>year||(e.getFullYear()==year&&e.getMonth()>=month));
+    // Checa se QUALQUER período de férias do colaborador está no mês/ano
+    function isOnVacationInMonth(vacations, month, year) {
+      if (!Array.isArray(vacations)) return false;
+      return vacations.some(v => {
+        if (!v?.start || !v?.end) return false;
+        const s = parseDateBR(v.start), e = parseDateBR(v.end);
+        if (!s || !e) return false;
+        return (s.getFullYear() < year || (s.getFullYear() === year && s.getMonth() <= month)) &&
+               (e.getFullYear() > year || (e.getFullYear() === year && e.getMonth() >= month));
+      });
     }
-    function isVacationOverlap(a,b) {
-      if (!a.start||!a.end||!b.start||!b.end) return false;
-      const aS=parseDateBR(a.start),aE=parseDateBR(a.end),bS=parseDateBR(b.start),bE=parseDateBR(b.end);
-      if (!aS||!aE||!bS||!bE) return false;
-      return aS<=bE && aE>=bS;
+    // Checa se há sobreposição entre QUALQUER período de férias de dois colaboradores
+    function isVacationOverlap(aVac, bVac) {
+      if (!Array.isArray(aVac) || !Array.isArray(bVac)) return false;
+      return aVac.some(a => bVac.some(b => {
+        if (!a?.start || !a?.end || !b?.start || !b?.end) return false;
+        const aS = parseDateBR(a.start), aE = parseDateBR(a.end),
+              bS = parseDateBR(b.start), bE = parseDateBR(b.end);
+        if (!aS || !aE || !bS || !bE) return false;
+        return aS <= bE && aE >= bS;
+      }));
     }
-     function findVacationConflicts(list,month,year) {
-      const inMonth = list.filter(c=>isOnVacationInMonth(c.vacation,month,year));
-      const set=new Set;
-      for(let i=0;i<inMonth.length;i++)
-        for(let j=i+1;j<inMonth.length;j++)
-          if(isVacationOverlap(inMonth[i].vacation,inMonth[j].vacation)){
-            set.add(inMonth[i].name),set.add(inMonth[j].name);
+    function findVacationConflicts(list, month, year) {
+      const inMonth = list.filter(c => isOnVacationInMonth(c.vacations, month, year));
+      const set = new Set;
+      for (let i = 0; i < inMonth.length; i++)
+        for (let j = i + 1; j < inMonth.length; j++)
+          if (isVacationOverlap(inMonth[i].vacations, inMonth[j].vacations)) {
+            set.add(inMonth[i].name);
+            set.add(inMonth[j].name);
           }
-      return set; 
-    } 
-
-    function findVacationSectorConflicts(list, month, year) {
-  const inMonth = list.filter(c => isOnVacationInMonth(c.vacation, month, year));
-  const setorMap = {};
-  inMonth.forEach(c => {
-    if (!setorMap[c.setor]) setorMap[c.setor] = [];
-    setorMap[c.setor].push(c);
-  });
-  const conflictSet = new Set();
-  Object.values(setorMap).forEach(setorColabs => {
-    for (let i = 0; i < setorColabs.length; i++) {
-      for (let j = i + 1; j < setorColabs.length; j++) {
-        if (isVacationOverlap(setorColabs[i].vacation, setorColabs[j].vacation)) {
-          conflictSet.add(setorColabs[i].name);
-          conflictSet.add(setorColabs[j].name);
-        }
-      }
+      return set;
     }
-  });
-  return conflictSet;
-}
+    function findVacationSectorConflicts(list, month, year) {
+      const inMonth = list.filter(c => isOnVacationInMonth(c.vacations, month, year));
+      const setorMap = {}, set = new Set;
+      inMonth.forEach(c => {
+        if (!setorMap[c.setor]) setorMap[c.setor] = [];
+        setorMap[c.setor].push(c);
+      });
+      Object.values(setorMap).forEach(arr => {
+        for (let i = 0; i < arr.length; i++)
+          for (let j = i + 1; j < arr.length; j++)
+            if (isVacationOverlap(arr[i].vacations, arr[j].vacations)) {
+              set.add(arr[i].name);
+              set.add(arr[j].name);
+            }
+      });
+      return set;
+    }
     const monthSelect = document.getElementById("month-select"), yearSelect = document.getElementById("year-select");
     for(let i=0;i<12;i++){const opt=document.createElement("option");opt.value=i;opt.textContent=monthNames[i];monthSelect.appendChild(opt);}
     const currentYear = new Date().getFullYear();
@@ -432,115 +462,128 @@
     document.getElementById("next-month").onclick=()=>{selectedMonth++;if(selectedMonth>11){selectedMonth=0;selectedYear++;}updateAll();};
     monthSelect.onchange=e=>{selectedMonth=parseInt(monthSelect.value,10);updateAll();};
     yearSelect.onchange=e=>{selectedYear=parseInt(yearSelect.value,10);updateAll();};
-
     function renderCalendar() {
-  const calendarTitle = document.getElementById("calendar-title"), calendarGrid = document.getElementById("calendar-grid");
-  calendarTitle.textContent=`${monthNames[selectedMonth]} ${selectedYear}`; calendarGrid.innerHTML="";
-  ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"].forEach(day=>{
-    const h=document.createElement("div");
-    h.className="calendar-day header";
-    h.textContent=day;
-    calendarGrid.appendChild(h);
-  });
-  const firstDay=new Date(selectedYear,selectedMonth,1).getDay(),daysInMonth=new Date(selectedYear,selectedMonth+1,0).getDate(),
-    birthdays=collaborators.filter(c=>getBirthdayMonth(c.birthday)===selectedMonth),
-    birthdayDays=birthdays.map(b=>getBirthdayDay(b.birthday));
-  const holidaysInMonth = holidays.filter(h => h.month === selectedMonth);
-
-  for(let i=0;i<firstDay;i++){
-    const e=document.createElement("div");
-    e.className="calendar-day empty";
-    calendarGrid.appendChild(e);
-  }
-  for(let day=1;day<=daysInMonth;day++){
-    const d=document.createElement("div");
-    d.className = "calendar-day";
-    d.textContent = day;
-    const holiday = holidaysInMonth.find(h=>h.day===day);
-    const localHoliday = getLocalHoliday(day, selectedMonth, selectedYear);
-    const isBirthday = birthdayDays.includes(day);
-
-   if ((holiday || localHoliday) && isBirthday) {
-  d.classList.add("conflict-event");
-  let tooltipText = "";
-  let holidayIcon = "";
-  if (localHoliday) {
-    d.classList.add("local-holiday");
-    tooltipText = `Aniversário: ${birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ")}\n | Feriado municipal: ${localHoliday.name}`;
-    ; // Ícone para municipal
-  } else {
-    tooltipText = `Aniversário: ${birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ")}\n | Feriado nacional: ${ holiday.name }`;
-    holidayIcon = `<i class="fa-solid fa-calendar-day"></i>`; // Ícone para nacional
-  }
-  //no tooltiptext altera a formatação do texto da caixa verdinha
-  d.innerHTML = `
-    <span style="position: relative;">${day}</span>
-    <i class="fa-solid fa-birthday-cake"></i>
-    ${holidayIcon}
-    <div class="calendar-tooltip";">${tooltipText}</div> 
-  `;
-}
-    else if (localHoliday) {
-      d.classList.add("local-holiday");
-      d.innerHTML = day +
-        `<div class="calendar-tooltip">${localHoliday.name}</div>`;
+      const calendarTitle = document.getElementById("calendar-title"), calendarGrid = document.getElementById("calendar-grid");
+      calendarTitle.textContent=`${monthNames[selectedMonth]} ${selectedYear}`; calendarGrid.innerHTML="";
+      ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"].forEach(day=>{
+        const h=document.createElement("div");
+        h.className="calendar-day header";
+        h.textContent=day;
+        calendarGrid.appendChild(h);
+      });
+      const firstDay=new Date(selectedYear,selectedMonth,1).getDay(),daysInMonth=new Date(selectedYear,selectedMonth+1,0).getDate(),
+        birthdays=collaborators.filter(c=>getBirthdayMonth(c.birthday)===selectedMonth),
+        birthdayDays=birthdays.map(b=>getBirthdayDay(b.birthday));
+      const holidaysInMonth = holidays.filter(h => h.month === selectedMonth);
+      for(let i=0;i<firstDay;i++){
+        const e=document.createElement("div");
+        e.className="calendar-day empty";
+        calendarGrid.appendChild(e);
+      }
+      for(let day=1;day<=daysInMonth;day++){
+        const d=document.createElement("div");
+        d.className = "calendar-day";
+        d.textContent = day;
+        const holiday = holidaysInMonth.find(h=>h.day===day);
+        const localHoliday = getLocalHoliday(day, selectedMonth, selectedYear);
+        const isBirthday = birthdayDays.includes(day);
+        if ((holiday || localHoliday) && isBirthday) {
+          d.classList.add("conflict-event");
+          let tooltipText = "";
+          let holidayIcon = "";
+          if (localHoliday) {
+            d.classList.add("local-holiday");
+            tooltipText = `Aniversário: ${birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ")}<br>Feriado municipal: ${localHoliday.name}`;
+          } else {
+            tooltipText = `Aniversário: ${birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ")}<br>Feriado nacional: ${ holiday.name }`;
+            holidayIcon = `<i class="fa-solid fa-calendar-day"></i>`;
+          }
+          d.innerHTML = `
+            <span style="position: relative;">${day}</span>
+            <i class="fa-solid fa-birthday-cake"></i>
+            ${holidayIcon}
+            <div class="calendar-tooltip">${tooltipText}</div> 
+          `;
+        }
+        else if (localHoliday) {
+          d.classList.add("local-holiday");
+          d.innerHTML = day +
+            `<div class="calendar-tooltip">${localHoliday.name}</div>`;
+        }
+        else if (holiday) {
+          d.className += " holiday";
+          d.innerHTML = day +
+            `<div class="calendar-tooltip">${holiday.name}</div>`;
+        }
+        else if (isBirthday) {
+          d.className += " birthday";
+          const names = birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ");
+          d.innerHTML = day +
+            `<div class="calendar-tooltip">Aniversário: ${names}</div>`;
+        }
+        const isToday = 
+          day === new Date().getDate() &&
+          selectedMonth === new Date().getMonth() &&
+          selectedYear === new Date().getFullYear();
+        if (isToday) {
+          d.classList.add("today");
+          if (d.innerHTML.includes('calendar-tooltip')) {
+            // Se já tem tooltip, só adiciona estrela
+            //d.innerHTML += `<i class="fa-solid fa-star" style="position:absolute;left:5px;bottom:5px;color:#ffeb3b;font-size:1.1em;"></i>`;
+          } else {
+           // d.innerHTML = `<span style="position: relative;">${day}</span><i class="fa-solid fa-star" style="position:absolute;left:5px;bottom:5px;color:#ffeb3b;font-size:1.1em;"></i>`;
+          }
+        }
+        calendarGrid.appendChild(d);
+      }
     }
-    else if (holiday) {
-      d.className += " holiday";
-      d.innerHTML = day +
-        `<div class="calendar-tooltip">${holiday.name}</div>`;
-    }
-    else if (isBirthday) {
-      d.className += " birthday";
-      const names = birthdays.filter(b=>getBirthdayDay(b.birthday)===day).map(b=>b.name).join(", ");
-      d.innerHTML = day +
-        `<div class="calendar-tooltip">Aniversário: ${names}</div>`;
-    }
-    calendarGrid.appendChild(d);
-  }
-}
-      // Responsivo: para mobile, tooltips ficam mais acima
-    
-
     function renderCollaboratorList(list,container,showVacation,showBirthday,conflicts,sectorConflicts){
-  container.innerHTML=list.length?list.map(colab=>{
-    const photoUrl=colab.photo||"https://via.placeholder.com/120x120?text=Colaborador";
-    return `<div class="member-card">
-      <i class="fas fa-user"></i>
-      <img src="${photoUrl}" alt="${colab.name}" class="member-photo"/>
-      <h3>${colab.name}</h3>
-     <p>
-  <strong>
-    <i class="fas fa-building"></i> Setor:
-  </strong> ${colab.setor || "N/D"}
-</p>
-      ${showVacation&&colab.vacation?`<p><i class="fas fa-plane-departure"></i> Férias: ${formatDateBR(colab.vacation.start)} a ${formatDateBR(colab.vacation.end)}</p>`:""}
-   
-      ${sectorConflicts&&sectorConflicts.has(colab.name)?`<p class="conflict" style="background:#ffefc7;color:#856404;border-color:#ffc107;"><i class="fas fa-exclamation-triangle"></i> Alerta: Conflito de férias no setor!</p>`:""}
-      ${showBirthday&&colab.birthday?`<p><i class="fas fa-birthday-cake"></i> Aniversário: ${formatDateBR(colab.birthday)}</p>`:""}
-    </div>`;
-  }).join(""):"<p>Nenhum colaborador encontrado.</p>";
-}
+      container.innerHTML=list.length?list.map(colab=>{
+        const photoUrl=colab.photo||"https://via.placeholder.com/120x120?text=Colaborador";
+        return `<div class="member-card">
+          <i class="fas fa-user"></i>
+          <img src="${photoUrl}" alt="${colab.name}" class="member-photo"/>
+          <h3>${colab.name}</h3>
+          <p><strong><i class="fas fa-building"></i> Setor:</strong> ${colab.setor || "N/D"}</p>
+          ${
+            showVacation && Array.isArray(colab.vacations)
+              ? colab.vacations.map((v, idx) =>
+  `<p><i class="fas fa-plane-departure"></i> <strong>${idx+1}º período:</strong> ${formatDateBR(v.start)} a ${formatDateBR(v.end)}</p>`
+).join("")
+              : ""
+          }
+          ${
+            sectorConflicts && sectorConflicts.has(colab.name)
+              ? `<p class="conflict" style="background:#ffefc7;color:#856404;border-color:#ffc107;"><i class="fas fa-exclamation-triangle"></i> Alerta: Conflito de férias no setor!</p>`
+              : ""
+          }
+          ${
+            showBirthday && colab.birthday
+              ? `<p><i class="fas fa-birthday-cake"></i> Aniversário: ${formatDateBR(colab.birthday)}</p>`
+              : ""
+          }
+        </div>`;
+      }).join(""):"<p>Nenhum colaborador encontrado.</p>";
+    }
     function updateAll(){
-  renderCalendar();
-  const vacationList=collaborators.filter(c=>isOnVacationInMonth(c.vacation,selectedMonth,selectedYear)),
-    birthdayList=collaborators.filter(c=>getBirthdayMonth(c.birthday)===selectedMonth),
-    conflicts=findVacationConflicts(collaborators,selectedMonth,selectedYear),
-    sectorConflicts=findVacationSectorConflicts(collaborators,selectedMonth,selectedYear);
-  renderCollaboratorList(vacationList,document.getElementById("vacation-list"),true,false,conflicts,sectorConflicts);
-  renderCollaboratorList(birthdayList,document.getElementById("birthday-list"),false,true,null,sectorConflicts);
-  renderCollaboratorList(collaborators.sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')),document.getElementById("team-list"),true,true,conflicts,sectorConflicts);
-}
+      renderCalendar();
+      const vacationList=collaborators.filter(c=>isOnVacationInMonth(c.vacations,selectedMonth,selectedYear)),
+        birthdayList=collaborators.filter(c=>getBirthdayMonth(c.birthday)===selectedMonth),
+        conflicts=findVacationConflicts(collaborators,selectedMonth,selectedYear),
+        sectorConflicts=findVacationSectorConflicts(collaborators,selectedMonth,selectedYear);
+      renderCollaboratorList(vacationList,document.getElementById("vacation-list"),true,false,conflicts,sectorConflicts);
+      renderCollaboratorList(birthdayList,document.getElementById("birthday-list"),false,true,null,sectorConflicts);
+      renderCollaboratorList(collaborators.sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')),document.getElementById("team-list"),true,true,conflicts,sectorConflicts);
+    }
     updateAll();
-    document.getElementById("toggleDark").onclick=function(){
+    document.getElementById("toggleDark")?.addEventListener("click",function(){
       document.body.classList.toggle("dark-mode");
       document.querySelector("footer").classList.toggle("dark-mode");
       document.querySelector(".container").classList.toggle("dark-mode");
-    }
+    });
   </script>
 </body>
 </html>
-
 
 
 
