@@ -509,7 +509,11 @@
       <i class="fas fa-user"></i>
       <img src="${photoUrl}" alt="${colab.name}" class="member-photo"/>
       <h3>${colab.name}</h3>
-      <p><strong>Setor:</strong> ${colab.setor||"N/D"}</p>
+     <p>
+  <strong>
+    <i class="fas fa-building"></i> Setor:
+  </strong> ${colab.setor || "N/D"}
+</p>
       ${showVacation&&colab.vacation?`<p><i class="fas fa-plane-departure"></i> Férias: ${formatDateBR(colab.vacation.start)} a ${formatDateBR(colab.vacation.end)}</p>`:""}
    
       ${sectorConflicts&&sectorConflicts.has(colab.name)?`<p class="conflict" style="background:#ffefc7;color:#856404;border-color:#ffc107;"><i class="fas fa-exclamation-triangle"></i> Alerta: Conflito de férias no setor!</p>`:""}
@@ -536,6 +540,7 @@
   </script>
 </body>
 </html>
+
 
 
 
