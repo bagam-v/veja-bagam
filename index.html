@@ -10,6 +10,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
+  
+  
+.calendar-day.expiring-soon {
+  background: #ffeb3b !important; /* Amarelo para destacar */
+  color: #000 !important;
+  border: 2px solid #ffc107 !important;
+  font-weight: bold;
+  box-shadow: 0 2px 10px #ffeb3b;
+}
 
 .calendar-day.today {
   border: 3px solid #dd4a06 !important;
@@ -17,7 +26,6 @@
   animation: pulse-today 1.2s infinite alternate;
   position: relative;
 }
-
 
 .calendar-day.conflict-event {
       /* Metade feriado, metade aniversário */
@@ -341,6 +349,28 @@
     {start:"19/08/2025",end:"01/09/2025"}
   ],birthday:"01/04"}
 ];
+
+// Função para calcular se as férias estão próximas de expirar
+function isVacationExpiringSoon(vacations) {
+  if (!Array.isArray(vacations)) return false;
+  const today = new Date();
+  return vacations.some(v => {
+    if (!v?.start) return false;
+    const startDate = parseDateBR(v.start);
+    if (!startDate) return false;
+    const expirationDate = new Date(startDate);
+    expirationDate.setFullYear(expirationDate.getFullYear() + 1); // Adiciona 1 ano
+    const daysUntilExpiration = Math.ceil((expirationDate - today) / (1000 * 60 * 60 * 24));
+    return daysUntilExpiration > 0 && daysUntilExpiration <= 30; // Aviso se faltar 30 dias ou menos
+  });
+}
+
+// Função para exibir pop-up de aviso
+function showVacationExpirationPopup(collaborator) {
+  alert(`Atenção: As férias de ${collaborator.name} estão próximas de expirar!`);
+}
+
+// Função para exibir feriados
 const localHolidays = [
       { day: 20, month: 0, year: 2025, name: "São Sebastião – Municipal" },
       { day: 7, month: 4, year: 2025, name: "Emancipação Política de Guamaré – Municipal" },
@@ -565,8 +595,26 @@ const localHolidays = [
         </div>`;
       }).join(""):"<p>Nenhum colaborador encontrado.</p>";
     }
+    if (isVacationExpiringSoon(colab.vacations)) {
+  showVacationExpirationPopup(colab); // Exibe o pop-up
+}
     function updateAll(){
       renderCalendar();
+
+      // Destacar dias de aviso de expiração de férias
+vacationList.forEach(colab => {
+  if (isVacationExpiringSoon(colab.vacations)) {
+    const vacationStart = parseDateBR(colab.vacations[0]?.start);
+    if (vacationStart && vacationStart.getMonth() === selectedMonth && vacationStart.getFullYear() === selectedYear) {
+      const dayElement = calendarGrid.querySelector(`.calendar-day:nth-child(${vacationStart.getDate() + firstDay})`);
+      if (dayElement) {
+        dayElement.classList.add("expiring-soon");
+        dayElement.innerHTML += `<div class="calendar-tooltip">Férias de ${colab.name} estão próximas de expirar!</div>`;
+      }
+    }
+  }
+});
+
       const vacationList=collaborators.filter(c=>isOnVacationInMonth(c.vacations,selectedMonth,selectedYear)),
         birthdayList=collaborators.filter(c=>getBirthdayMonth(c.birthday)===selectedMonth),
         conflicts=findVacationConflicts(collaborators,selectedMonth,selectedYear),
