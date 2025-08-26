@@ -492,7 +492,9 @@ const localHolidays = [
     document.getElementById("next-month").onclick=()=>{selectedMonth++;if(selectedMonth>11){selectedMonth=0;selectedYear++;}updateAll();};
     monthSelect.onchange=e=>{selectedMonth=parseInt(monthSelect.value,10);updateAll();};
     yearSelect.onchange=e=>{selectedYear=parseInt(yearSelect.value,10);updateAll();};
+    
     function renderCalendar() {
+      const calendarGrid = document.getElementById("calendar-grid");
       const calendarTitle = document.getElementById("calendar-title"), calendarGrid = document.getElementById("calendar-grid");
       calendarTitle.textContent=`${monthNames[selectedMonth]} ${selectedYear}`; calendarGrid.innerHTML="";
       ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"].forEach(day=>{
@@ -594,42 +596,35 @@ const localHolidays = [
           }
         </div>`;
       }).join(""):"<p>Nenhum colaborador encontrado.</p>";
-      
-      if (isVacationExpiringSoon(colab.vacations)) {
-  showVacationExpirationPopup(colab); // Exibe o pop-up
-}
     }
-    function updateAll(){
-      renderCalendar();
 
-      // Destacar dias de aviso de expiração de férias
-vacationList.forEach(colab => {
-  if (isVacationExpiringSoon(colab.vacations)) {
-    const vacationStart = parseDateBR(colab.vacations[0]?.start);
-    if (vacationStart && vacationStart.getMonth() === selectedMonth && vacationStart.getFullYear() === selectedYear) {
-      const dayElement = calendarGrid.querySelector(`.calendar-day:nth-child(${vacationStart.getDate() + firstDay})`);
-      if (dayElement) {
-        dayElement.classList.add("expiring-soon");
-        dayElement.innerHTML += `<div class="calendar-tooltip">Férias de ${colab.name} estão próximas de expirar!</div>`;
+    function updateAll() {
+  const calendarGrid = document.getElementById("calendar-grid");
+  const firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
+
+  const vacationList = collaborators.filter(c => isOnVacationInMonth(c.vacations, selectedMonth, selectedYear));
+  vacationList.forEach(colab => {
+    if (isVacationExpiringSoon(colab.vacations)) {
+      const vacationStart = parseDateBR(colab.vacations[0]?.start);
+      if (vacationStart && vacationStart.getMonth() === selectedMonth && vacationStart.getFullYear() === selectedYear) {
+        const dayElement = calendarGrid.querySelector(`.calendar-day:nth-child(${vacationStart.getDate() + firstDay})`);
+        if (dayElement) {
+          dayElement.classList.add("expiring-soon");
+          dayElement.innerHTML += `<div class="calendar-tooltip">Férias de ${colab.name} estão próximas de expirar!</div>`;
+        }
       }
     }
-  }
-});
+  });
 
-      const vacationList=collaborators.filter(c=>isOnVacationInMonth(c.vacations,selectedMonth,selectedYear)),
-        birthdayList=collaborators.filter(c=>getBirthdayMonth(c.birthday)===selectedMonth),
-        conflicts=findVacationConflicts(collaborators,selectedMonth,selectedYear),
-        sectorConflicts=findVacationSectorConflicts(collaborators,selectedMonth,selectedYear);
-      renderCollaboratorList(vacationList,document.getElementById("vacation-list"),true,false,conflicts,sectorConflicts);
-      renderCollaboratorList(birthdayList,document.getElementById("birthday-list"),false,true,null,sectorConflicts);
-      renderCollaboratorList(collaborators.sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')),document.getElementById("team-list"),true,true,conflicts,sectorConflicts);
-    }
-    updateAll();
-    document.getElementById("toggleDark")?.addEventListener("click",function(){
-      document.body.classList.toggle("dark-mode");
-      document.querySelector("footer").classList.toggle("dark-mode");
-      document.querySelector(".container").classList.toggle("dark-mode");
-    });
+  const birthdayList = collaborators.filter(c => getBirthdayMonth(c.birthday) === selectedMonth);
+  const conflicts = findVacationConflicts(collaborators, selectedMonth, selectedYear);
+  const sectorConflicts = findVacationSectorConflicts(collaborators, selectedMonth, selectedYear);
+
+  renderCalendar();
+  renderCollaboratorList(vacationList, document.getElementById("vacation-list"), true, false, conflicts, sectorConflicts);
+  renderCollaboratorList(birthdayList, document.getElementById("birthday-list"), false, true, null, sectorConflicts);
+  renderCollaboratorList(collaborators.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')), document.getElementById("team-list"), true, true, conflicts, sectorConflicts);
+}
   </script>
 </body>
 </html>
