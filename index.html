@@ -598,7 +598,11 @@ const localHolidays = [
       }).join(""):"<p>Nenhum colaborador encontrado.</p>";
     }
 
-    ffunction updateAll() {
+    function updateAll() {
+  
+  console.log("Função updateAll chamada");
+  console.log("Mês selecionado:", selectedMonth);
+  console.log("Ano selecionado:", selectedYear);
   // Renderize o calendário primeiro
   renderCalendar();
 
