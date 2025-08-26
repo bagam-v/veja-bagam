@@ -598,19 +598,23 @@ const localHolidays = [
       }).join(""):"<p>Nenhum colaborador encontrado.</p>";
     }
 
-    function updateAll() {
-  renderCalendar(); // Certifique-se de que o calendário seja renderizado primeiro.
+    ffunction updateAll() {
+  // Renderize o calendário primeiro
+  renderCalendar();
 
+  // Obtenha o grid do calendário e o primeiro dia do mês
   const calendarGrid = document.getElementById("calendar-grid");
   const firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
 
+  // Filtrar colaboradores de férias no mês selecionado
   const vacationList = collaborators.filter(c => isOnVacationInMonth(c.vacations, selectedMonth, selectedYear));
   vacationList.forEach(colab => {
     if (isVacationExpiringSoon(colab.vacations)) {
       const vacationStart = parseDateBR(colab.vacations[0]?.start);
       if (vacationStart && vacationStart.getMonth() === selectedMonth && vacationStart.getFullYear() === selectedYear) {
-        const dayIndex = vacationStart.getDate() + firstDay - 1; // Ajuste o índice corretamente.
-        const dayElement = calendarGrid.children[dayIndex]; // Use children para acessar diretamente os elementos.
+        // Calcular o índice correto do dia no calendário
+        const dayIndex = vacationStart.getDate() + firstDay - 1; // Ajuste para índice baseado em 0
+        const dayElement = calendarGrid.children[dayIndex]; // Acessar diretamente os filhos do grid
         if (dayElement) {
           dayElement.classList.add("expiring-soon");
           dayElement.innerHTML += `<div class="calendar-tooltip">Férias de ${colab.name} estão próximas de expirar!</div>`;
@@ -619,10 +623,14 @@ const localHolidays = [
     }
   });
 
+  // Filtrar aniversariantes do mês
   const birthdayList = collaborators.filter(c => getBirthdayMonth(c.birthday) === selectedMonth);
+
+  // Encontrar conflitos de férias
   const conflicts = findVacationConflicts(collaborators, selectedMonth, selectedYear);
   const sectorConflicts = findVacationSectorConflicts(collaborators, selectedMonth, selectedYear);
 
+  // Renderizar as listas de colaboradores
   renderCollaboratorList(vacationList, document.getElementById("vacation-list"), true, false, conflicts, sectorConflicts);
   renderCollaboratorList(birthdayList, document.getElementById("birthday-list"), false, true, null, sectorConflicts);
   renderCollaboratorList(collaborators.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')), document.getElementById("team-list"), true, true, conflicts, sectorConflicts);
