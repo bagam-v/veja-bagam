@@ -594,10 +594,11 @@ const localHolidays = [
           }
         </div>`;
       }).join(""):"<p>Nenhum colaborador encontrado.</p>";
-    }
-    if (isVacationExpiringSoon(colab.vacations)) {
+      
+      if (isVacationExpiringSoon(colab.vacations)) {
   showVacationExpirationPopup(colab); // Exibe o pop-up
 }
+    }
     function updateAll(){
       renderCalendar();
 
