@@ -599,6 +599,8 @@ const localHolidays = [
     }
 
     function updateAll() {
+  renderCalendar(); // Certifique-se de que o calendário seja renderizado primeiro.
+
   const calendarGrid = document.getElementById("calendar-grid");
   const firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
 
@@ -607,7 +609,8 @@ const localHolidays = [
     if (isVacationExpiringSoon(colab.vacations)) {
       const vacationStart = parseDateBR(colab.vacations[0]?.start);
       if (vacationStart && vacationStart.getMonth() === selectedMonth && vacationStart.getFullYear() === selectedYear) {
-        const dayElement = calendarGrid.querySelector(`.calendar-day:nth-child(${vacationStart.getDate() + firstDay})`);
+        const dayIndex = vacationStart.getDate() + firstDay - 1; // Ajuste o índice corretamente.
+        const dayElement = calendarGrid.children[dayIndex]; // Use children para acessar diretamente os elementos.
         if (dayElement) {
           dayElement.classList.add("expiring-soon");
           dayElement.innerHTML += `<div class="calendar-tooltip">Férias de ${colab.name} estão próximas de expirar!</div>`;
@@ -620,7 +623,6 @@ const localHolidays = [
   const conflicts = findVacationConflicts(collaborators, selectedMonth, selectedYear);
   const sectorConflicts = findVacationSectorConflicts(collaborators, selectedMonth, selectedYear);
 
-  renderCalendar();
   renderCollaboratorList(vacationList, document.getElementById("vacation-list"), true, false, conflicts, sectorConflicts);
   renderCollaboratorList(birthdayList, document.getElementById("birthday-list"), false, true, null, sectorConflicts);
   renderCollaboratorList(collaborators.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')), document.getElementById("team-list"), true, true, conflicts, sectorConflicts);
