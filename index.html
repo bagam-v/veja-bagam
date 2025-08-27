@@ -386,7 +386,7 @@
   {name:"AGEILSON",setor:"Operação",photo:"Fotos Colaboradores/ageilson.png",vacations:[
     {start:"13/01/2025",end:"01/02/2025"},
     {start:"12/01/2026",end:"31/01/2026"}
-  ],birthday:"11/09"},
+  ],birthday:"27/08"},
   {name:"ALLAN",setor:"Operação",photo:"Fotos Colaboradores/allan.png",vacations:[
     {start:"29/05/2025",end:"12/06/2025"},
     {start:"20/10/2025",end:"08/11/2025"}
@@ -846,20 +846,20 @@ function launchConfettiOnBirthdayCards() {
   const vacationList = collaborators.filter(c=>isOnVacationInMonth(c.vacations,selectedMonth,selectedYear)),
         birthdayList = collaborators.filter(c=>getBirthdayMonth(c.birthday)===selectedMonth),
         conflicts = findVacationConflicts(collaborators,selectedMonth,selectedYear),
-        sectorConflicts = findVacationSectorConflicts(collaborators,selectedMonth,selectedYear);
+        sectorConflicts = findVacationSectorConflicts(collaborators,selectedMonth,selectedYear),
+        expiringList = getExpiringVacations(collaborators, selectedMonth, selectedYear); // <-- ADICIONADO
   renderCollaboratorList(vacationList,document.getElementById("vacation-list"),true,false,conflicts,sectorConflicts);
   renderCollaboratorList(birthdayList,document.getElementById("birthday-list"),false,true,null,sectorConflicts);
   renderCollaboratorList(collaborators.sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')),document.getElementById("team-list"),true,true,conflicts,sectorConflicts);
+  renderExpiringVacationsList(expiringList, document.getElementById("expiring-vacations-list")); // <-- ADICIONADO
+
   // espera DOM renderizar e inicia confete em loop se houver aniversários hoje
   setTimeout(launchConfettiOnBirthdayCards, 200);
 
-
-
   //quiser voltar depois apaga aqui pra ficar em loop os emojis
   renderCollaboratorList(collaborators.sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')),document.getElementById("team-list"),true,true,conflicts,sectorConflicts);
-// Adiciona eventos de mouse nos cards de aniversário do dia
-setupBirthdayCardConfetti();
-
+  // Adiciona eventos de mouse nos cards de aniversário do dia
+  setupBirthdayCardConfetti();
 }
 
 // Preenche setores únicos no filtro
