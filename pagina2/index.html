@@ -121,7 +121,7 @@ form.addEventListener('submit', async (e) => {
   const st = getAttempts();
   if (st.lockedUntil && nowMs() < st.lockedUntil) {
     const sec = Math.ceil((st.lockedUntil - nowMs())/1000);
-    msg.textContent = Conta temporariamente bloqueada. Tente novamente em ${sec}s.;
+    msg.textContent = 'Conta temporariamente bloqueada. Tente novamente em ' + sec + 's.';
     msg.className = 'error';
     return;
   }
@@ -140,9 +140,9 @@ form.addEventListener('submit', async (e) => {
     st.count = (st.count || 0) + 1;
     if (st.count >= MAX_ATTEMPTS) {
       st.lockedUntil = nowMs() + (LOCK_MINUTES * 60 * 1000);
-      msg.textContent = Muitas tentativas falhas. Bloqueado por ${LOCK_MINUTES} minutos.;
+      msg.textContent = 'Muitas tentativas falhas. Bloqueado por ' + LOCK_MINUTES + ' minutos.';
     } else {
-      msg.textContent = Usuário ou senha incorretos. Tentativas: ${st.count}/${MAX_ATTEMPTS};
+      msg.textContent = 'Usuário ou senha incorretos. Tentativas: ' + st.count + '/' + MAX_ATTEMPTS;
     }
     setAttempts(st);
     msg.className = 'error';
