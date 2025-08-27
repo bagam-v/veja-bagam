@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
@@ -80,11 +79,9 @@ const SALT = 's@Lt-VB-2025!';
    { id: 'u1', name: 'Nome do Colaborador', emailHash: '<hex>', passwordHash: '<hex>' }
 */
 const ACCOUNTS = [
-  // exemplo (remova ou substitua):
-  // { id:'t1', name:'Teste', emailHash:'baf4...', passwordHash:'8a3f...' }
-
-  // Conta adicionada conforme hashes fornecidos
-  { id: 'u1', name: 'Usuário', emailHash: '645a50acc4fb1cccb73c14a2e44fe4736342522513235ff470d382f691e9cc6b', passwordHash: '60db0fb561225b6def0aae239a76d0ac1909da2f1bcbda2631b1b2cccff5b66c' }
+  { id: 'u1', name: 'Usuário', emailHash: '645a50acc4fb1cccb73c14a2e44fe4736342522513235ff470d382f691e9cc6b', passwordHash: '60db0fb561225b6def0aae239a76d0ac1909da2f1bcbda2631b1b2cccff5b66c' },
+  { id: 'u2', name: 'Usuário 2', emailHash: '10ec3c3cab49c6deb10636d3a8db3b137ad04953e016d6850ab3675bbc0e84c8', passwordHash: '9e2e76739122d5cba6d065242fff166e5acad83b01ceec87ca42f4b028585ffc' },
+  { id: 'u3', name: 'Usuário 3', emailHash: 'e22c2791a112645db0edb37b6d153b89ca294d78043d9e72cce632610bda9267', passwordHash: '0233f5afc95e906d818f87bb20c93f67d530ce15c452ddcee799cc3a592b17f8' }
 ];
 
 /* Helper para calcular SHA-256 hex (use no console para gerar hashes e colar em ACCOUNTS) */
@@ -124,7 +121,7 @@ form.addEventListener('submit', async (e) => {
   const st = getAttempts();
   if (st.lockedUntil && nowMs() < st.lockedUntil) {
     const sec = Math.ceil((st.lockedUntil - nowMs())/1000);
-    msg.textContent = `Conta temporariamente bloqueada. Tente novamente em ${sec}s.`;
+    msg.textContent = Conta temporariamente bloqueada. Tente novamente em ${sec}s.;
     msg.className = 'error';
     return;
   }
@@ -143,9 +140,9 @@ form.addEventListener('submit', async (e) => {
     st.count = (st.count || 0) + 1;
     if (st.count >= MAX_ATTEMPTS) {
       st.lockedUntil = nowMs() + (LOCK_MINUTES * 60 * 1000);
-      msg.textContent = `Muitas tentativas falhas. Bloqueado por ${LOCK_MINUTES} minutos.`;
+      msg.textContent = Muitas tentativas falhas. Bloqueado por ${LOCK_MINUTES} minutos.;
     } else {
-      msg.textContent = `Usuário ou senha incorretos. Tentativas: ${st.count}/${MAX_ATTEMPTS}`;
+      msg.textContent = Usuário ou senha incorretos. Tentativas: ${st.count}/${MAX_ATTEMPTS};
     }
     setAttempts(st);
     msg.className = 'error';
