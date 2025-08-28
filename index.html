@@ -380,7 +380,8 @@
     <img src="Fotos Colaboradores/logo2.png" width="70" height="80">
   </footer>
   <script>
-if (sessionStorage.getItem('vb_autenticado') !== 'ok') {
+
+  if (sessionStorage.getItem('vb_autenticado') !== 'ok') {
   window.location.href = 'https://bagam-v.github.io/veja-bagam/pagina2/index.html';
 }
     // Todos os colaboradores mantidos e exemplo de conflito
@@ -388,7 +389,7 @@ if (sessionStorage.getItem('vb_autenticado') !== 'ok') {
   {name:"AGEILSON",setor:"Operação",photo:"Fotos Colaboradores/ageilson.png",vacations:[
     {start:"13/01/2025",end:"01/02/2025"},
     {start:"12/01/2026",end:"31/01/2026"}
-  ],birthday:"27/08"},
+  ],birthday:"09/11"},
   {name:"ALLAN",setor:"Operação",photo:"Fotos Colaboradores/allan.png",vacations:[
     {start:"29/05/2025",end:"12/06/2025"},
     {start:"20/10/2025",end:"08/11/2025"}
@@ -874,7 +875,10 @@ function preencherSetoresFiltro() {
 // Mostra/esconde painel de filtro
 document.getElementById('filter-btn').onclick = function() {
   preencherSetoresFiltro();
-  document.getElementById('filter-panel').style.display = 'block';
+  const panel = document.getElementById('filter-panel');
+  // Alterna visibilidade ao clicar no botão
+  panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+  document.getElementById('filter-resultado').innerHTML = '';
 };
 document.getElementById('filter-fechar').onclick = function() {
   document.getElementById('filter-panel').style.display = 'none';
@@ -1050,6 +1054,7 @@ function checkAutoNotifications() {
 checkAutoNotifications();
 updateAll();
   </script>
+
 </body>
 </html>
 
