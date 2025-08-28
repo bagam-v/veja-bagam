@@ -40,8 +40,8 @@
       <div class="card-body">
         <form id="loginForm" autocomplete="off">
           <div class="mb-3">
-            <label for="email">Usuário (email)</label>
-            <input id="email" class="form-control" type="email" required autocomplete="username" />
+            <label for="key">Chave de acesso</label>
+            <input id="key" class="form-control" type="text" maxlength="4" minlength="4" pattern="[A-Za-z0-9]{4}" required autocomplete="off" />
           </div>
           <div class="mb-3">
             <label for="password">Senha</label>
@@ -61,7 +61,7 @@
         </div>
         <script>
         const assunto = encodeURIComponent('Solicitação de acesso — VEJA BAGAM');
-        const corpo = encodeURIComponent('Olá,\n\nGostaria de solicitar acesso ao sistema VEJA BAGAM.\n\nMeu nome: \nMeu e-mail: \n\nObrigado!');
+        const corpo = encodeURIComponent('Olá,\n\nGostaria de solicitar acesso ao sistema VEJA BAGAM.\n\nMeu nome: \nMinha chave desejada: \n\nObrigado!');
         const email = 'bagam.vibra@gmail.com';
 
         document.getElementById('btnSolicitarGmail').onclick = function() {
@@ -77,7 +77,7 @@
           );
         };
         document.getElementById('btnSolicitarMailto').onclick = function() {
-          window.location.href = `mailto:${email}?subject=${assunto}&body=${corpo}`;
+          window.open(`mailto:${email}?subject=${assunto}&body=${corpo}`, '_self');
         };
         </script>
       </div>
@@ -87,14 +87,13 @@
   <footer>AW;Code • 2025</footer>
 
 <script>
-
-
 const SALT = 's@Lt-VB-2025!';
 
+/* ACCOUNTS: agora usa chaveHash e não emailHash */
 const ACCOUNTS = [
-  { id: 'u1', name: 'Usuário', emailHash: '645a50acc4fb1cccb73c14a2e44fe4736342522513235ff470d382f691e9cc6b', passwordHash: '60db0fb561225b6def0aae239a76d0ac1909da2f1bcbda2631b1b2cccff5b66c' },
-  { id: 'u2', name: 'Usuário 2', emailHash: '10ec3c3cab49c6deb10636d3a8db3b137ad04953e016d6850ab3675bbc0e84c8', passwordHash: '9e2e76739122d5cba6d065242fff166e5acad83b01ceec87ca42f4b028585ffc' },
-  { id: 'u3', name: 'Usuário 3', emailHash: 'e22c2791a112645db0edb37b6d153b89ca294d78043d9e72cce632610bda9267', passwordHash: '0233f5afc95e906d818f87bb20c93f67d530ce15c452ddcee799cc3a592b17f8' }
+  { id: 'u1', name: 'Wenderson', chaveHash: 'be4a16cc770b2e81d82a0c794ecf50c665ce111e2982eabb0342c4e1ff534600', passwordHash: '60db0fb561225b6def0aae239a76d0ac1909da2f1bcbda2631b1b2cccff5b66c' },
+  { id: 'u2', name: 'Ana Clezia', chaveHash: '02617a799f31f259653e504dfb29457c783fa7184e564fbdfe7a9920f5b45944', passwordHash: '9e2e76739122d5cba6d065242fff166e5acad83b01ceec87ca42f4b028585ffc' },
+  { id: 'u3', name: 'Cleirton', chaveHash: 'a3ee7b29402a75a12d6cbaefd6a9201ea39064e38068b5f3dd6a6fcf9c7fbaff', passwordHash: '0233f5afc95e906d818f87bb20c93f67d530ce15c452ddcee799cc3a592b17f8' }
 ];
 
 /* Helper para calcular SHA-256 hex (use no console para gerar hashes e colar em ACCOUNTS) */
@@ -103,13 +102,13 @@ async function sha256Hex(text) {
   const hash = await crypto.subtle.digest('SHA-256', enc);
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
-async function computeHashes(email, password) {
-  const e = (email||'').toLowerCase().trim();
-  const emailHash = await sha256Hex(e + SALT);
+async function computeHashes(chave, password) {
+  const c = (chave||'').toUpperCase().trim();
+  const chaveHash = await sha256Hex(c + SALT);
   const passwordHash = await sha256Hex(password + SALT);
-  console.log('EMAIL HASH (cole no ACCOUNTS.emailHash):', emailHash);
+  console.log('CHAVE HASH (cole no ACCOUNTS.chaveHash):', chaveHash);
   console.log('PASSWORD HASH (cole no ACCOUNTS.passwordHash):', passwordHash);
-  return { emailHash, passwordHash };
+  return { chaveHash, passwordHash };
 }
 
 /* Session & brute-force basic protection */
@@ -139,14 +138,18 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  const email = document.getElementById('email').value.trim().toLowerCase();
+  const chave = document.getElementById('key').value.trim().toUpperCase();
   const password = document.getElementById('password').value;
-  if (!email || !password) return;
+  if (!chave || chave.length !== 4 || !password) {
+    msg.textContent = 'Informe uma chave de 4 dígitos e a senha.';
+    msg.className = 'error';
+    return;
+  }
 
-  const emailHash = await sha256Hex(email + SALT);
+  const chaveHash = await sha256Hex(chave + SALT);
   const passwordHash = await sha256Hex(password + SALT);
 
-  const account = ACCOUNTS.find(a => a.emailHash === emailHash && a.passwordHash === passwordHash);
+  const account = ACCOUNTS.find(a => a.chaveHash === chaveHash && a.passwordHash === passwordHash);
 
   if (!account) {
     // incrementar tentativas
@@ -155,7 +158,7 @@ form.addEventListener('submit', async (e) => {
       st.lockedUntil = nowMs() + (LOCK_MINUTES * 60 * 1000);
       msg.textContent = 'Muitas tentativas falhas. Bloqueado por ' + LOCK_MINUTES + ' minutos.';
     } else {
-      msg.textContent = 'Usuário ou senha incorretos. Tentativas: ' + st.count + '/' + MAX_ATTEMPTS;
+      msg.textContent = 'Chave ou senha incorretos. Tentativas: ' + st.count + '/' + MAX_ATTEMPTS;
     }
     setAttempts(st);
     msg.className = 'error';
@@ -168,7 +171,6 @@ form.addEventListener('submit', async (e) => {
   msg.className = '';
   msg.textContent = 'Autenticado. Redirecionando...';
   setTimeout(() => {
-    // redireciona para URL alvo
     window.location.href = 'https://bagam-v.github.io/veja-bagam/';
   }, 800);
 });
