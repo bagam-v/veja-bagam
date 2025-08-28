@@ -47,16 +47,39 @@
             <label for="password">Senha</label>
             <input id="password" class="form-control" type="password" required autocomplete="current-password" />
           </div>
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <input id="remember" type="checkbox" /> <label for="remember" style="display:inline;font-weight:600">Lembrar</label>
-            </div>
+          <div class="d-flex justify-content-end align-items-center">
             <button class="btn btn-login px-4" type="submit">Entrar</button>
           </div>
           <div id="msg" class="hint"></div>
         </form>
 
-        <div class="small-note mt-3">Por segurança os emails não estão salvos em texto neste ficheiro. Adicione contas usando hashes (ver instruções no final).</div>
+        <div class="text-center mt-3">
+          <div class="mb-2">Solicitar acesso:</div>
+          <button class="btn btn-outline-primary mb-1" id="btnSolicitarGmail" type="button">Via Gmail</button>
+          <button class="btn btn-outline-info mb-1" id="btnSolicitarOutlook" type="button">Via Outlook</button>
+          <button class="btn btn-outline-secondary mb-1" id="btnSolicitarMailto" type="button">Outro Email</button>
+        </div>
+        <script>
+        const assunto = encodeURIComponent('Solicitação de acesso — VEJA BAGAM');
+        const corpo = encodeURIComponent('Olá,\n\nGostaria de solicitar acesso ao sistema VEJA BAGAM.\n\nMeu nome: \nMeu e-mail: \n\nObrigado!');
+        const email = 'bagam.vibra@gmail.com';
+
+        document.getElementById('btnSolicitarGmail').onclick = function() {
+          window.open(
+            `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${assunto}&body=${corpo}`,
+            '_blank'
+          );
+        };
+        document.getElementById('btnSolicitarOutlook').onclick = function() {
+          window.open(
+            `https://outlook.live.com/mail/0/deeplink/compose?to=${email}&subject=${assunto}&body=${corpo}`,
+            '_blank'
+          );
+        };
+        document.getElementById('btnSolicitarMailto').onclick = function() {
+          window.location.href = `mailto:${email}?subject=${assunto}&body=${corpo}`;
+        };
+        </script>
       </div>
     </div>
   </div>
@@ -64,20 +87,10 @@
   <footer>AW;Code • 2025</footer>
 
 <script>
-/*
-  Segurança/Design:
-  - As contas devem ser colocadas no array ACCOUNTS como hashes (emailHash e passwordHash).
-  - Use a função helper computeHashes(email,password) no console para gerar valores e cole os hashes abaixo.
-  - Atenção: nada no cliente é 100% à prova de inspeção. Hashes impedem exposição casual dos emails.
-*/
 
-/* SALT — altera para algo próprio e secreto antes de publicar */
+
 const SALT = 's@Lt-VB-2025!';
 
-/* ACCOUNTS: liste as contas com hashes (EXEMPLO vazio). Substitua com as linhas geradas pelo helper.
-   Estrutura:
-   { id: 'u1', name: 'Nome do Colaborador', emailHash: '<hex>', passwordHash: '<hex>' }
-*/
 const ACCOUNTS = [
   { id: 'u1', name: 'Usuário', emailHash: '645a50acc4fb1cccb73c14a2e44fe4736342522513235ff470d382f691e9cc6b', passwordHash: '60db0fb561225b6def0aae239a76d0ac1909da2f1bcbda2631b1b2cccff5b66c' },
   { id: 'u2', name: 'Usuário 2', emailHash: '10ec3c3cab49c6deb10636d3a8db3b137ad04953e016d6850ab3675bbc0e84c8', passwordHash: '9e2e76739122d5cba6d065242fff166e5acad83b01ceec87ca42f4b028585ffc' },
@@ -151,14 +164,7 @@ form.addEventListener('submit', async (e) => {
 
   // sucesso
   resetAttempts();
-  // criar token de sessão simples (não seguro para dados sensíveis — só para controle local)
-  const token = await sha256Hex(account.id + ':' + Date.now() + ':' + SALT);
-  if (document.getElementById('remember').checked) {
-    localStorage.setItem('vb_session', JSON.stringify({ id: account.id, token }));
-  } else {
-    sessionStorage.setItem('vb_session', JSON.stringify({ id: account.id, token }));
-  }
-
+  sessionStorage.setItem('vb_autenticado', 'ok');
   msg.className = '';
   msg.textContent = 'Autenticado. Redirecionando...';
   setTimeout(() => {
@@ -167,27 +173,7 @@ form.addEventListener('submit', async (e) => {
   }, 800);
 });
 
-/* Auto-login se sessão existente válida (básico) */
-(async function tryAutoLogin(){
-  const s = localStorage.getItem('vb_session') || sessionStorage.getItem('vb_session');
-  if (!s) return;
-  try {
-    const obj = JSON.parse(s);
-    // O token não é verificado contra servidor — assume sessão válida local.
-    if (obj && obj.id && ACCOUNTS.find(a=>a.id===obj.id)) {
-      // redireciona direto
-      window.location.href = 'https://bagam-v.github.io/veja-bagam/';
-    }
-  } catch(_) {}
-})();
-
-/* UTIL: Instrução curta para admin (visível no console)
-  1) Abra a página localmente no navegador.
-  2) No console, rode: await computeHashes('email@exemplo.com','senha123')
-  3) Copie os dois hashes e adicione uma linha no array ACCOUNTS, ex:
-     { id:'u1', name:'Fulano', emailHash:'<emailHash>', passwordHash:'<passwordHash>' }
-  4) Salve arquivo e reabra. Agora pode logar com o email e senha.
-*/
+/* Auto-login removido para exigir login sempre */
 </script>
 </body>
 </html>
