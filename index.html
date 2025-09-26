@@ -408,7 +408,7 @@
   {name:"ALDERIR",setor:"Pintura",photo:"Fotos Colaboradores/alderir.jpeg",vacations:[],birthday:"04/02"},
   {name:"ANA CLÉZIA",setor:"CCO",photo:"Fotos Colaboradores/ana.jpeg",vacations:[],birthday:"20/11"},
   {name:"AUGUSTO",setor:"Manutenção",photo:"Fotos Colaboradores/augusto.png",vacations:[],birthday:"25/05"},
-  {name:"CLEIRTON",setor:"Gerência",photo:"Fotos Colaboradores/cleirton.png",vacations:[
+  {name:"CLEIRTON",setor:"Liderança",photo:"Fotos Colaboradores/cleirton.png",vacations:[
     {start:"03/11/2025",end:"17/11/2025"},
     {start:"23/02/2025",end:"27/02/2025"}
   ],birthday:"12/05"},
@@ -419,7 +419,7 @@
   {name:"DANILO",setor:"Laboratório",photo:"Fotos Colaboradores/danilo.png",vacations:[],birthday:"12/10"},
   {name:"DOUGLAS",setor:"Operação",photo:"Fotos Colaboradores/douglas.jpeg",vacations:[],birthday:"23/12"},
   {name:"EDNILMA",setor:"Conservação",photo:"Fotos Colaboradores/nenem.jpg",vacations:[],birthday:"26/08"},
-  {name:"EDUARDO",setor:"Liderança",photo:"Fotos Colaboradores/eduardo.png",vacations:[
+  {name:"EDUARDO",setor:["Liderança","CCO"],photo:"Fotos Colaboradores/eduardo.png",vacations:[
     {start:"05/03/2025",end:"09/03/2025"}
   ],birthday:"16/03"},
   {name:"ELTOM",setor:"Operação",photo:"Fotos Colaboradores/eltom.png",vacations:[
@@ -439,7 +439,7 @@
   {name:"HELINE",setor:"Administrativo",photo:"Fotos Colaboradores/heline.png",vacations:[
     {start:"24/02/2025",end:"28/02/2025"}
   ],birthday:"06/11"},
-  {name:"HILANA",setor:"CCO",photo:"Fotos Colaboradores/hilana.png",vacations:[
+  {name:"HILANA",setor:["CCO","Liderança"],photo:"Fotos Colaboradores/hilana.png",vacations:[
     {start:"24/02/2025",end:"28/02/2025"}
   ],birthday:"24/06"},
   {name:"ISAIAS",setor:"Operação",photo:"Fotos Colaboradores/isaias.png",vacations:[],birthday:"29/03"},
@@ -620,8 +620,12 @@ const localHolidays = [
       const inMonth = list.filter(c => isOnVacationInMonth(c.vacations, month, year));
       const setorMap = {}, set = new Set;
       inMonth.forEach(c => {
-        if (!setorMap[c.setor]) setorMap[c.setor] = [];
-        setorMap[c.setor].push(c);
+        // Verifica se setor é array ou string
+        const setores = Array.isArray(c.setor) ? c.setor : [c.setor];
+        setores.forEach(setor => {
+          if (!setorMap[setor]) setorMap[setor] = [];
+          setorMap[setor].push(c);
+        });
       });
       Object.values(setorMap).forEach(arr => {
         for (let i = 0; i < arr.length; i++)
@@ -1068,7 +1072,6 @@ updateAll();
 
 </body>
 </html>
-
 
 
 
