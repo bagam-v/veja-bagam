@@ -400,8 +400,6 @@
   {name:"AGEILSON",setor:"Operação",photo:"Fotos Colaboradores/ageilson.png",vacations:[
     {start:"13/01/2025",end:"01/02/2025"},
     {start:"12/01/2026",end:"31/01/2026"}
-    
-    
   ],birthday:"09/11"},
   {name:"ALLAN",setor:"Operação",photo:"Fotos Colaboradores/allan.png",vacations:[],birthday:"12/06"},
   {name:"ALDERIR",setor:"Pintura",photo:"Fotos Colaboradores/alderir.jpeg",vacations:[],birthday:"04/02"},
@@ -427,7 +425,9 @@
   {name:"GABRIEL",setor:"Vigilância",photo:"Fotos Colaboradores/gabriel.png",vacations:[],birthday:"25/03"},
   {name:"GEDSON",setor:"Operação",photo:"Fotos Colaboradores/gedson.png",vacations:[],birthday:"03/06"},
   {name:"GLEISON",setor:"Operação",photo:"Fotos Colaboradores/gleison.png",vacations:[],birthday:"06/07"},
-  {name:"HELINE",setor:"Administrativo",photo:"Fotos Colaboradores/heline.png",vacations:[],birthday:"06/11"},
+  {name:"HELINE",setor:"Administrativo",photo:"Fotos Colaboradores/heline.png",vacations:[
+  {start:"30/06/2026",end:"09/07/2026"}
+  ],birthday:"06/11"},
   {name:"HILANA",setor:["CCO","Liderança"],photo:"Fotos Colaboradores/hilana.png",vacations:[
     {start:"17/03/2026",end:"21/03/2026"}
   ],birthday:"24/06"},
@@ -450,8 +450,7 @@
   ],birthday:"10/05"},
   {name:"WENDERSON",setor:"TI",photo:"Fotos Colaboradores/wenderson.png",vacations:[],birthday:"08/08"},
   {name:"WILLIAM",setor:"SMS",photo:"Fotos Colaboradores/william.png",vacations:[
-  ],birthday:"01/04"}
-];
+    {start:"22/04/2026",end:"05/05/2026"} {start:"16/06/2026",end:"26/06/2026"}],birthday:"01/04"}];
 
 // Função para obter colaboradores com férias a expirar (11 meses sem férias)
 function getExpiringVacations(collaborators, selectedMonth, selectedYear) {
@@ -1050,6 +1049,7 @@ updateAll();
 
 </body>
 </html>
+
 
 
 
